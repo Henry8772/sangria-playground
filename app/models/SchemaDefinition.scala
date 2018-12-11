@@ -39,16 +39,9 @@ object SchemaDefinition {
         Field("id", StringType,
           Some("The id of the character."),
           resolve = _.value.id),
-        Field("name", OptionType(StringType),
+        Field("name", StringType,
           Some("The name of the character."),
-          resolve = _.value.name),
-        Field("friends", ListType(Character),
-          Some("The friends of the character, or an empty list if they have none."),
-          complexity = Some((_, _, children) ⇒ 100 + 1.5 * children),
-          resolve = ctx ⇒ characters.deferSeqOpt(ctx.value.friends)),
-        Field("appearsIn", OptionType(ListType(OptionType(EpisodeEnum))),
-          Some("Which movies they appear in."),
-          resolve = _.value.appearsIn map (e ⇒ Some(e)))
+          resolve = _.value.name)
       ))
 
   val Human =
@@ -60,19 +53,9 @@ object SchemaDefinition {
         Field("id", StringType,
           Some("The id of the human."),
           resolve = _.value.id),
-        Field("name", OptionType(StringType),
+        Field("name", StringType,
           Some("The name of the human."),
-          resolve = _.value.name),
-        Field("friends", ListType(Character),
-          Some("The friends of the human, or an empty list if they have none."),
-          complexity = Some((_, _, children) ⇒ 100 + 1.5 * children),
-          resolve = ctx ⇒ characters.deferSeqOpt(ctx.value.friends)),
-        Field("appearsIn", OptionType(ListType(OptionType(EpisodeEnum))),
-          Some("Which movies they appear in."),
-          resolve = _.value.appearsIn map (e ⇒ Some(e))),
-        Field("homePlanet", OptionType(StringType),
-          Some("The home planet of the human, or null if unknown."),
-          resolve = _.value.homePlanet)
+          resolve = _.value.name)
       ))
 
   val Droid = ObjectType(
@@ -84,19 +67,9 @@ object SchemaDefinition {
         Some("The id of the droid."),
         tags = ProjectionName("_id") :: Nil,
         resolve = _.value.id),
-      Field("name", OptionType(StringType),
+      Field("name", StringType,
         Some("The name of the droid."),
-        resolve = ctx ⇒ Future.successful(ctx.value.name)),
-      Field("friends", ListType(Character),
-        Some("The friends of the droid, or an empty list if they have none."),
-        complexity = Some((_, _, children) ⇒ 100 + 1.5 * children),
-        resolve = ctx ⇒ characters.deferSeqOpt(ctx.value.friends)),
-      Field("appearsIn", OptionType(ListType(OptionType(EpisodeEnum))),
-        Some("Which movies they appear in."),
-        resolve = _.value.appearsIn map (e ⇒ Some(e))),
-      Field("primaryFunction", OptionType(StringType),
-        Some("The primary function of the droid."),
-        resolve = _.value.primaryFunction)
+        resolve = ctx ⇒ Future.successful(ctx.value.name))
     ))
 
   val ID = Argument("id", StringType, description = "id of the character")
